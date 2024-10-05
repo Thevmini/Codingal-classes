@@ -6,8 +6,8 @@ pygame.init()
 screen = pygame.display.set_mode((500, 500))
 pygame.display.set_caption("Colorful Bounce")
 
-sprite_color_change_event = pygame.USEREVENT+1
-bg_color_change_event = pygame.USEREVENT+2
+sprite_color_change_event = pygame.USEREVENT + 1
+bg_color_change_event = pygame.USEREVENT + 2
 
 red = pygame.Color("red")
 green = pygame.Color("green")
@@ -23,16 +23,20 @@ screen.fill(bg_color)
 
 clock = pygame.time.Clock()
 
+
 def change_bg_color():
     global bg_color
     bg_color = random.choice([blue, green, magenta])
 
+
 def change_sp_color(sprite):
-    new_color = random.choice([blue, green, magenta])
+    new_color = random.choice([yellow, orange, red])
     sprite.change_color(new_color)
+
 
 all_sprites_group = pygame.sprite.Group()
 running = True
+
 
 class Sprite(pygame.sprite.Sprite):
     def __init__(self, color, height, width):
@@ -47,11 +51,13 @@ class Sprite(pygame.sprite.Sprite):
         self.rect.move_ip(self.velocity)
         boundary_hit = False
 
-        if self.rect.left<=0 or self.rect.right>=500:
-            self.velocity[0]=-self.velocity[0]
+        if self.rect.left <= 0 or self.rect.right >= 500:
+            self.velocity[0] = -self.velocity[0]
+            boundary_hit = True
 
-        if self.rect.top<=0 or self.rect.bottom>=500:
-            self.velocity[1]=-self.velocity[1]
+        if self.rect.top <= 0 or self.rect.bottom >= 500:
+            self.velocity[1] = -self.velocity[1]
+            boundary_hit = True
 
         if boundary_hit:
             pygame.event.post(pygame.event.Event(sprite_color_change_event))
@@ -60,15 +66,16 @@ class Sprite(pygame.sprite.Sprite):
     def change_color(self, new_color):
         self.image.fill(new_color)
 
-sp1 = Sprite(sp_color, 20, 30)
-sp1.rect.x = random.randint(0, 480)
-sp1.rect.y = random.randint(0, 470)
+sp1 =Sprite(sp_color, 20, 30)
+sp1.rect.x =random.randint(0, 480)
+sp1.rect.y =random.randint(0, 470)
 all_sprites_group.add(sp1)
+
 
 while running:
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-            pygame.quit
+            pygame.quit()
             running = False
         elif event.type == bg_color_change_event:
             change_bg_color()
